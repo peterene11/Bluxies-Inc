@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bluxies Incorporated</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playfair+Display:wght@700&family=Pacifico&display=swap"
+    rel="stylesheet"
+  />
+  <!-- Font Awesome CDN for Social Icons and Arrow Icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  />
+  <style>
+    /* RESET & GLOBAL */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f9f9ee;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* Scroll Progress Indicator */
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+    #progress-bar {
+      width: 0%;
+      height: 100%;
+      background: #D78594;
+    }
+    
+    /* Back to Top Arrow */
+    #back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #D78594;
+      color: #fff;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s;
+      z-index: 110;
+    }
+    #back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Fade Animations */
+    .fade {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @keyframes floatIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* NAVBAR */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 5px;
+      left: 0;
+      padding: 16px 20px;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #C16D6D;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
+      opacity: 0;
+      animation: floatIn 0.8s ease-out forwards;
+    }
+    .navbar.scrolled {
+      background-color: rgba(193, 109, 109, 0.8);
+    }
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    .navbar .logo {
+      height: 50px;
+    }
+    .navbar .logo img {
+      height: 100%;
+      width: auto;
+    }
+    
+    /* Hamburger (mobile) */
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      color: #fff;
+      cursor: pointer;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .nav-links li {
+      margin-left: 30px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover {
+      color: #D78594;
+    }
+    
+    /* HERO SECTION (unchanged) */
+    .hero {
+      height: 100vh;
+      background: url('images/background.jpg') center center no-repeat;
+      background-size: cover;
+      margin-top: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      animation: floatIn 1s ease-out forwards;
+      animation-delay: 0.5s;
+      text-align: center;
+      padding: 20px;
+    }
+    .hero .hero-content {
+      max-width: 800px;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #D1C3AF;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #D1C3AF;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+    .cta-btn {
+      background-color: #D78594;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-size: 18px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .cta-btn:hover {
+      background-color: #8E24AA;
+    }
+    
+    /* STRUCTURE & FRAMEWORK (unchanged) */
+    #structure {
+      background: #D1C3AF;
+      padding: 80px 20px;
+    }
+    #structure .container {
+      text-align: center;
+    }
+    #structure h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #4D3221;
+    }
+    #structure .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      color: #4D3221;
+    }
+    .values-grid {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 10px;
+    }
+    .value-card {
+      flex: 0 0 240px;
+      height: 250px;
+      background: #C16D6D;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      scroll-snap-align: start;
+    }
+    .value-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    .value-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .value-card p {
+      font-size: 0.95rem;
+      color: #f9f9ee;
+    }
+    
+    /* CORE VALUES SECTION – UPDATED */
+    #core-values {
+      background: #f9f9ee;
+      padding: 80px 20px;
+    }
+    #core-values .container {
+      text-align: center;
+    }
+    #core-values h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #4D3221;
+    }
+    #core-values .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      color: #4D3221;
+    }
+    .core-values-grid {
+      display: grid;
+      gap: 20px;
+      /* Use 4 columns on desktop, force 2 columns on mobile */
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    @media (max-width: 767px) {
+      .core-values-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .core-value-card {
+        padding: 10px;
+      }
+      .core-value-card img {
+        height: 100px;
+      }
+      .core-value-card h3 {
+        font-size: 1rem;
+      }
+      .core-value-card p {
+        font-size: 0.85rem;
+      }
+    }
+    .core-value-card {
+      background: #f9f9ee;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center;
+    }
+    .core-value-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    .core-value-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .core-value-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #C16D6D;
+    }
+    .core-value-card p {
+      font-size: 0.95rem;
+      color: #4D3221;
+    }
+    
+    /* MEET OUR FOUNDER (unchanged) */
+    #founder {
+      background: #D1C3AF;
+      padding: 80px 20px;
+    }
+    #founder .container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+    .founder-image {
+      flex: 0 0 auto;
+      max-width: 300px;
+      text-align: center;
+    }
+    .founder-image img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .founder-name {
+      font-family: 'Pacifico', cursive !important;
+      font-size: 1.8rem;
+      color: #4D3221;
+      margin-top: 10px;
+    }
+    .founder-content {
+      flex: 1;
+      max-width: 600px;
+      text-align: left;
+    }
+    #founder h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #4D3221;
+      font-family: 'Playfair Display', serif;
+    }
+    #founder p {
+      font-size: 1.1rem;
+      color: #4D3221;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-family: 'Open Sans', sans-serif;
+    }
+    
+    /* TESTIMONIALS (unchanged except slider height) */
+    #testimonials {
+      background: #fff;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    #testimonials h2 {
+      font-size: 2.5rem;
+      color: #4D3221;
+      margin-bottom: 20px;
+    }
+    .testimonial-slider {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      overflow: hidden;
+      height: 400px;
+    }
+    .testimonial {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: opacity 0.6s ease-out;
+      pointer-events: none;
+    }
+    .testimonial.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .testimonial .quote {
+      font-size: 1.2rem;
+      font-style: italic;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .testimonial .author {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #D78594;
+    }
+    .dots {
+      margin-top: 20px;
+    }
+    .dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin: 0 5px;
+      background: #ccc;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .dot.active {
+      background: #D78594;
+    }
+    
+    /* FOOTER – Adjusted to be smaller */
+    #professional-footer {
+      background: #000;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+    }
+    #professional-footer .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    #professional-footer .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+    }
+    #professional-footer .footer-left {
+      flex: 0 0 auto;
+      margin-right: 20px;
+    }
+    #professional-footer .footer-logo {
+      width: 60px;
+    }
+    #professional-footer .footer-middle {
+      flex: 1;
+      text-align: center;
+      margin-top: 0;
+    }
+    #professional-footer .footer-middle p,
+    #professional-footer .footer-middle a {
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    #professional-footer .footer-middle a:hover {
+      color: #D78594;
+    }
+    #professional-footer .footer-bottom {
+      width: 100%;
+      text-align: center;
+      margin-top: 5px;
+    }
+    
+    /* MOBILE MEDIA QUERY – Header adjustments */
+    @media (max-width: 767px) {
+      .navbar {
+        padding: 8px 20px;
+      }
+      .logo {
+        height: 35px;
+      }
+      .hamburger {
+        display: block;
+      }
+      /* Position mobile nav below header without expanding it */
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: #C16D6D;
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 9;
+      }
+      .nav-links.active {
+        display: flex;
+      }
+      .nav-links li {
+        margin: 10px 0;
+      }
+      .hero h1 {
+        font-size: 2.4rem;
+      }
+      .hero p {
+        font-size: 1.1rem;
+      }
+      .hero {
+        background: url('images/mob1.jpg') center center no-repeat;
+        background-size: cover;
+        object-fit: cover;
+        display: flex;
+      }
+      .testimonial-slider {
+        height: 500px;
+      }
+    }
+    @media (min-width: 768px) {
+      .container {
+        width: 85%;
+      }
+    }
+    @media (min-width: 992px) {
+      .container {
+        width: 90%;
+      }
+    }
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 1200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Scroll Progress Indicator -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+  
+  <!-- Back to Top Arrow -->
+  <div id="back-to-top"><i class="fas fa-arrow-up"></i></div>
+  
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="BluxiesInc. Logo">
+      </a>
+      <!-- Hamburger for mobile -->
+      <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="volunteer.html">Become A Volunteer</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <!-- HERO SECTION (unchanged) -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>Bluxies Incorporated</h1>
+      <p>
+        Harnessing the power of community to empower young women. We are creating a space where women rise together, share their experiences, and build a better future. Get involved and join our mission to uplift and inspire!
+      </p>
+      <a href="#join" class="cta-btn">Get Involved</a>
+    </div>
+  </section>
+  
+  <!-- STRUCTURE & FRAMEWORK SECTION (unchanged) -->
+  <section id="structure" class="values-section fade">
+    <div class="container">
+      <h2>Structure and Framework</h2>
+      <p class="subtitle">
+        Bluxies Incorporated prioritizes the individual and collective development of her members; hence, we're looking to partner with organizations that propagate the following values:
+      </p>
+      <div class="values-grid">
+        <div class="value-card">
+          <h3>Activism</h3>
+          <p>Empowering women to advocate for social change and equality.</p>
+        </div>
+        <div class="value-card">
+          <h3>Community</h3>
+          <p>Building strong, supportive networks for women to thrive together.</p>
+        </div>
+        <div class="value-card">
+          <h3>Financial Literacy</h3>
+          <p>Educating women on managing finances for a secure future.</p>
+        </div>
+        <div class="value-card">
+          <h3>Health and Wellness</h3>
+          <p>Promoting physical and mental well-being.</p>
+        </div>
+        <div class="value-card">
+          <h3>Mentorship</h3>
+          <p>Connecting women with experienced guides and role models.</p>
+        </div>
+        <div class="value-card">
+          <h3>Portfolio Building</h3>
+          <p>Assisting in the creation of professional portfolios.</p>
+        </div>
+        <div class="value-card">
+          <h3>Professional Development</h3>
+          <p>Offering training and resources for career growth.</p>
+        </div>
+        <div class="value-card">
+          <h3>Self-Improvement</h3>
+          <p>Encouraging continuous personal development.</p>
+        </div>
+        <div class="value-card">
+          <h3>Skill Acquisition</h3>
+          <p>Providing opportunities to learn new skills.</p>
+        </div>
+        <div class="value-card">
+          <h3>Women Empowerment</h3>
+          <p>Championing the rights and potential of women.</p>
+        </div>
+        <div class="value-card">
+          <h3>Volunteering</h3>
+          <p>Encouraging community service and engagement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CORE VALUES SECTION (updated) -->
+  <section id="core-values" class="core-values-section fade">
+    <div class="container">
+      <h2>Our Core Values</h2>
+      <p class="subtitle">
+        At Bluxies, we value standard qualities that encourage women’s progress and improvement. They include:
+      </p>
+      <div class="core-values-grid">
+        <div class="core-value-card">
+          <img src="images/accountability.jpg" alt="Accountability">
+          <h3>Accountability</h3>
+          <p>Taking responsibility for our actions and commitments.</p>
+        </div>
+        <div class="core-value-card">
+          <img src="images/community.jpg" alt="Community">
+          <h3>Community</h3>
+          <p>Fostering a sense of belonging and support among women.</p>
+        </div>
+        <div class="core-value-card">
+          <img src="images/education.jpg" alt="Education">
+          <h3>Education</h3>
+          <p>Promoting lifelong learning and knowledge sharing.</p>
+        </div>
+        <div class="core-value-card">
+          <img src="images/empowerment.jpg" alt="Empowerment">
+          <h3>Empowerment</h3>
+          <p>Enabling women to take control of their lives and future.</p>
+        </div>
+        <div class="core-value-card">
+          <img src="images/elegance.jpg" alt="Elegance">
+          <h3>Elegance</h3>
+          <p>Embracing grace and poise in every aspect of life.</p>
+        </div>
+        <div class="core-value-card">
+          <img src="images/etiquette.jpg" alt="Etiquette">
+          <h3>Etiquette</h3>
+          <p>Upholding refined behavior and manners.</p>
+        </div>
+        <div class="core-value-card">
+          <img src="images/feminity.jpg" alt="Femininity">
+          <h3>Femininity</h3>
+          <p>Celebrating the unique strengths and qualities of women.</p>
+        </div>
+        <div class="core-value-card">
+          <img src="images/purpose.jpg" alt="Purpose Discovery">
+          <h3>Purpose Discovery</h3>
+          <p>Encouraging the journey to find one's true calling.</p>
+        </div>
+        <div class="core-value-card">
+          <img src="images/selfdev.jpg" alt="Self-Development">
+          <h3>Self-Development</h3>
+          <p>Investing in personal growth and continuous improvement.</p>
+        </div>
+        <div class="core-value-card">
+          <img src="images/sisterhood.jpg" alt="Sisterhood">
+          <h3>Sisterhood</h3>
+          <p>Nurturing bonds that uplift and support each other.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- MEET OUR FOUNDER SECTION (unchanged) -->
+  <section id="founder" class="fade">
+    <div class="container">
+      <div class="founder-image">
+        <img src="images/founder.jpeg" alt="Founder">
+        <p class="founder-name">Naomi Donatus</p>
+      </div>
+      <div class="founder-content">
+        <h2>Meet Our Founder</h2>
+        <p>
+          Bluxies was created out of two things I love and value: sisterhood and luxury. It is a network of goal-oriented women striving to make something beautiful out of their lives. I’m in certain spaces with high-value and high-caliber women, and I am hoping to replicate the ambiance. We will be exploring everything pertaining to women empowerment. The goal is to build a solid community of well-rounded women who will stand out in society and create sustainable impact.
+        </p>
+        <p>
+          The community officially launched in October 2023. We currently have 50+ members from different geographical locations, and various events have been held successfully in most of these regions.
+        </p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- TESTIMONIALS SECTION (unchanged except slider height) -->
+  <section id="testimonials" class="fade">
+    <h2>What Our Members Say</h2>
+    <div class="testimonial-slider">
+      <div class="testimonial active">
+        <p class="quote">
+          “Becoming a Bluxie was a dream come true. Finally, I have a community of like-minded women where I can share my mind freely. I've learnt patience, self-confidence, and how to trust myself and my skills. Bluxies have been a stepping stone to getting my life on track. I’m really glad to be a part of this community.”
+        </p>
+        <p class="author">– Stephanie Jon.</p>
+      </div>
+      <div class="testimonial">
+        <p class="quote">
+          “Being a Bluxie has pushed me out of my comfort zone countless times. I've learned to prioritise self-development and becoming a better person. Also, being a Bluxie made me appreciate female friendships; hence, I made more female friends. I’ve found support, empowerment, and sisterhood here.”
+        </p>
+        <p class="author">– Ebun Oluwa.</p>
+      </div>
+      <div class="testimonial">
+        <p class="quote">
+          “Being a Bluxie has impacted me in so many areas of my life, like how I think and my perspective on life. I've realised that there’s more to life and endless opportunities to become a better person. Since I became a Bluxie, my life has totally turned around. I've learned many skills that have made big differences in my life, like creating and working with a to-do list, journaling, and goal-setting. I’m so happy and so proud of being a part of this beautiful community.”
+        </p>
+        <p class="author">– Chioma.</p>
+      </div>
+      <div class="testimonial">
+        <p class="quote">
+          “Being a Bluxie is one of the best things that have happened for me this year. Bluxies Incorporated is the true definition of ‘women supporting women’. This community has given me access to a ton of opportunities I'd never get for free anywhere else! I’ve also gotten to meet the most beautiful, progress-minded women who are always willing to render support. I'm so excited to see what more lies in store for me as a Bluxie!”
+        </p>
+        <p class="author">– Shone Mercy.</p>
+      </div>
+    </div>
+    <div class="dots">
+      <span class="dot active" data-index="0"></span>
+      <span class="dot" data-index="1"></span>
+      <span class="dot" data-index="2"></span>
+      <span class="dot" data-index="3"></span>
+    </div>
+  </section>
+  
+  <!-- FOOTER (updated for a smaller, desktop-like layout) -->
+  <footer id="professional-footer">
+    <div class="container">
+      <div class="footer-row">
+        <div class="footer-left">
+          <img class="footer-logo" src="images/footerlogo.jpeg" alt="Footer Logo">
+        </div>
+        <div class="footer-middle">
+          <p class="built-by">Built by ByteArc</p>
+          <p>Email: <a href="mailto:bluxiesincorporated@gmail.com">bluxiesincorporated@gmail.com</a></p>
+          <p>Phone: <a href="tel:+2349073962900">+2349073962900</a></p>
+          <div class="social-links" style="margin-top: 10px;">
+            <a href="https://www.facebook.com/share/1XtCQojTWV/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.tiktok.com/@bluxiesincorporated?_t=ZM-8tu9mVgCilK&_r=1" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.instagram.com/bluxiesincorporated?igsh=MjE5MHBycXdxMDEx" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/bluxies-incorporated/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Bluxies Incorporated. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    // Intersection Observer for fade animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const faders = document.querySelectorAll('.fade');
+      const appearOptions = {
+        threshold: 0.2,
+        rootMargin: "0px 0px -50px 0px"
+      };
+      const appearOnScroll = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, appearOptions);
+      faders.forEach(fader => {
+        appearOnScroll.observe(fader);
+      });
+    });
+
+    // Scroll Progress Indicator & Navbar transparency toggle
+    window.addEventListener('scroll', () => {
+      const progressBar = document.getElementById('progress-bar');
+      const totalHeight = document.body.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      progressBar.style.width = progress + '%';
+
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 0) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+
+      const backToTop = document.getElementById('back-to-top');
+      if (window.scrollY > 300) {
+        backToTop.classList.add('show');
+      } else {
+        backToTop.classList.remove('show');
+      }
+    });
+
+    // Back to Top Arrow click event
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Mobile Nav Toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Testimonials Carousel
+    document.addEventListener('DOMContentLoaded', () => {
+      const testimonials = document.querySelectorAll('.testimonial');
+      const dots = document.querySelectorAll('.dot');
+      let currentIndex = 0;
+      const total = testimonials.length;
+
+      function showTestimonial(index) {
+        testimonials.forEach((t, i) => {
+          t.classList.toggle('active', i === index);
+        });
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === index);
+        });
+      }
+
+      // Auto-rotate every 4.5 seconds
+      setInterval(() => {
+        currentIndex = (currentIndex + 1) % total;
+        showTestimonial(currentIndex);
+      }, 4500);
+
+      // Dot navigation
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          currentIndex = parseInt(dot.getAttribute('data-index'));
+          showTestimonial(currentIndex);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
