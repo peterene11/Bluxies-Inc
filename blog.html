@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog - Bluxies Incorporated</title>
+  <link rel="icon" type="image/png" href="images/bb3.png">
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playfair+Display:wght@700&family=Pacifico&display=swap"
+    rel="stylesheet"
+  />
+  <!-- Font Awesome CDN for Social Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <style>
+    /* RESET */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Arial', sans-serif; background: #f9f9ee; color: #333; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 20px; }
+    
+    /* NAVBAR */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 5px; /* Slightly below the progress bar */
+      left: 0;
+      padding: 16px 20px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      background-color: #C16D6D;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
+      opacity: 0;
+      animation: floatIn 0.8s ease-out forwards;
+    }
+    .navbar.scrolled { background-color: rgba(193, 109, 109, 0.8); }
+    .navbar .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar .logo { height: 50px; }
+    .navbar .logo img { height: 100%; width: auto; }
+    .navbar .nav-links {
+      display: flex;
+      list-style: none;
+      margin-left: auto;
+    }
+    .navbar .nav-links li { margin-left: 30px; }
+    .navbar .nav-links a {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: white;
+      transition: color 0.3s;
+    }
+    .navbar .nav-links a:hover { color: #D78594; }
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      color: #fff;
+      cursor: pointer;
+      margin-left: auto;
+    }
+    
+    /* HERO SECTION */
+    .hero {
+      background: url('images/blog-hero.jpg') no-repeat center center/cover;
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+      margin-top: 80px;
+      height: 35vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      opacity: 0;
+      animation: floatIn 1s ease-out forwards;
+      animation-delay: 0.5s;
+    }
+    .hero .hero-content { z-index: 2; }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #D1C3AF;
+      font-weight: 700;
+    }
+    .hero p {
+      font-size: 1rem;
+      color: #D1C3AF;
+      font-weight: 300;
+    }
+    
+    /* BLOG POSTS SECTION */
+    #blog-posts {
+      padding: 60px 20px;
+      background: #fff;
+      text-align: center;
+    }
+    #blog-posts .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    #blog-posts h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #4D3221;
+    }
+    .no-posts {
+      font-size: 1.2rem;
+      color: #4D3221;
+      padding: 40px 0;
+    }
+    
+    /* INTERVIEW SECTION */
+    #interviews {
+      padding: 60px 20px;
+      background: #f9f9ee;
+    }
+    #interviews .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    #interviews h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #4D3221;
+      text-align: center;
+    }
+    #interviews .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      color: #4D3221;
+      text-align: center;
+    }
+    .interview-post {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 20px;
+      margin-bottom: 40px;
+    }
+    .interview-post img {
+      width: 40%;
+      max-width: 300px;
+      border-radius: 10px;
+    }
+    .interview-content {
+      flex: 1;
+      text-align: left;
+    }
+    .interview-content p {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .interview-content .member-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #C16D6D;
+    }
+    
+    /* NEW FOOTER DESIGN */
+    #professional-footer {
+      background: #0d1b2a;
+      color: #fff;
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 0.8rem;
+    }
+    #professional-footer .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+    .footer-links li a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      text-transform: capitalize;
+    }
+    .footer-links li a:hover {
+      color: #fff;
+    }
+    .footer-brand {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .footer-tagline {
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      color: #ccc;
+    }
+    .footer-social a {
+      color: #ccc;
+      margin: 0 10px;
+      font-size: 1.2rem;
+    }
+    .footer-social a:hover {
+      color: #fff;
+    }
+    #professional-footer .footer-copyright {
+      font-size: 0.8rem;
+      margin-top: 20px;
+      color: #ccc;
+    }
+    
+    /* FADE ANIMATION */
+    @keyframes floatIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fade {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* BACK TO TOP */
+    #back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #D78594;
+      color: #fff;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s;
+      z-index: 110;
+    }
+    #back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 10px 15px;
+      }
+      .navbar .logo img {
+        height: 40px;
+      }
+      .nav-links {
+        display: none !important;
+        flex-direction: column;
+        background: #C16D6D;
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 9;
+      }
+      .nav-links.active {
+        display: flex !important;
+      }
+      .nav-links li {
+        margin: 10px 0;
+      }
+      .hamburger {
+        display: block;
+      }
+      
+      .hero {
+        padding: 80px 20px;
+      }
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero p {
+        font-size: 0.9rem;
+      }
+      
+      .interview-post {
+        flex-direction: column;
+      }
+      .interview-post img {
+        width: 100%;
+        max-width: none;
+      }
+      
+      #professional-footer .footer-row {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+      }
+    }
+    
+    @media (min-width: 768px) and (max-width: 991px) {
+      .hero h1 {
+        font-size: 2.4rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="BluxiesInc. Logo">
+      </a>
+      <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="volunteer.html">Become A Volunteer</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <!-- HERO SECTION -->
+  <section id="blog-hero" class="hero">
+    <div class="hero-content">
+      <h1>Our Blog</h1>
+      <p>Discover inspiring stories and insights that empower our community.</p>
+    </div>
+  </section>
+  
+  <!-- BLOG POSTS SECTION -->
+  <section id="blog-posts">
+    <div class="container">
+      <h2>Blog Posts</h2>
+      <div class="no-posts">
+        <p>There are currently no blog posts. Please check back later.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- INTERVIEW SECTION -->
+  <section id="interviews">
+    <div class="container">
+      <h2>Interviews</h2>
+      <p class="subtitle">Hear what our community has to say</p>
+      <div class="interviews-grid">
+        <!-- Interview 1 -->
+        <article class="interview-post fade">
+          <img src="images/interview1.jpeg" alt="Interview 1">
+          <div class="interview-content">
+            <p>"Tolu highlighted memorable and eye-opening moments in her career. She also shared the importance of staying focused on your goal. She doesn’t make it look easy like most advocates; she talks about the glitz and shares the muddy moments as well. In a country where we’re convinced that passion means nothing, Tolu reminds me that I CAN, and I can have it all."</p>
+            <p class="member-name">– Deborah Nwaeze</p>
+          </div>
+        </article>
+        <!-- Interview 2 -->
+        <article class="interview-post fade">
+          <img src="images/interview2.jpeg" alt="Interview 2">
+          <div class="interview-content">
+            <p>"One of the most interesting parts of the interview was finding out I can get therapy for as low as 5k! My key takeaways are to prioritise my mental health, set healthy boundaries between work, school, and everything in general, and take breaks when need be."</p>
+            <p class="member-name">– Ife Oluwa</p>
+          </div>
+        </article>
+        <!-- Interview 3 -->
+        <article class="interview-post fade">
+          <img src="images/interview3.jpeg" alt="Interview 3">
+          <div class="interview-content">
+            <p>"Funke’s interview was so uplifting and positive! Her love for God shone through, and her message about wellness being a personal journey resonated with me. I found her passion for fitness and purposeful living to be incredibly inspiring. The interview was a truly delightful read from start to finish!"</p>
+            <p class="member-name">– Ohene Mathina</p>
+          </div>
+        </article>
+         <!-- Interview 4 -->
+         <article class="interview-post fade">
+          <img src="images/interview4.jpeg" alt="Interview 4">
+          <div class="interview-content">
+
+          </div>
+        </article>
+         <!-- Interview 5 -->
+         <article class="interview-post fade">
+          <img src="images/interview5.jpeg" alt="Interview 5">
+          <div class="interview-content">
+
+          </div>
+        </article>
+         <!-- Interview 6 -->
+         <article class="interview-post fade">
+          <img src="images/interview6.jpeg" alt="Interview 6">
+          <div class="interview-content">
+
+          </div>
+        </article>
+         <!-- Interview 7 -->
+         <article class="interview-post fade">
+          <img src="images/interview7.jpeg" alt="Interview 7">
+          <div class="interview-content">
+
+          </div>
+        </article>
+         <!-- Interview 8-->
+         <article class="interview-post fade">
+          <img src="images/interview8.jpeg" alt="Interview 8">
+          <div class="interview-content">
+
+          </div>
+        </article>
+         <!-- Interview 9 -->
+         <article class="interview-post fade">
+          <img src="images/interview9.jpeg" alt="Interview 9">
+          <div class="interview-content">
+
+          </div>
+        </article>
+         <!-- Interview 10 -->
+         <article class="interview-post fade">
+          <img src="images/interview10.jpeg" alt="Interview 10">
+          <div class="interview-content">
+
+          </div>
+        </article>
+         <!-- Interview 11 -->
+         <article class="interview-post fade">
+          <img src="images/interview11.jpeg" alt="Interview 11">
+          <div class="interview-content">
+
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+  
+  <!-- NEW FOOTER DESIGN -->
+  <footer id="professional-footer">
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="volunteer.html#member-cta">Become a member</a></li>
+        <li><a href="blog.html">Blogs</a></li>
+        <li><a href="events.html">Events</a></li>
+      </ul>
+      <h1 class="footer-brand">Bluxies Incoporated</h1>
+      <p class="footer-tagline">Cultivating an unbreakable bond of sisterhood</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/share/1XtCQojTWV/?mibextid=wwXIfr" target="_blank">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://www.tiktok.com/@bluxiesincorporated?_t=ZM-8tu9mVgCilK&_r=1" target="_blank">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://www.instagram.com/bluxiesincorporated?igsh=MjE5MHBycXdxMDEx" target="_blank">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.linkedin.com/company/bluxies-incorporated/" target="_blank">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </ul>
+      <p class="footer-copyright">
+        &copy; 2025 Bluxies Incoporated. All Rights Reserved.<br>
+        Built by ByteArc
+      </p>
+    </div>
+  </footer>
+  
+  <!-- BACK TO TOP ARROW -->
+  <div id="back-to-top"><i class="fas fa-arrow-up"></i></div>
+  
+  <script>
+    // Scroll Progress Indicator & Navbar transparency toggle
+    window.addEventListener('scroll', () => {
+      const progressBar = document.getElementById('progress-bar');
+      const totalHeight = document.body.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      progressBar.style.width = progress + '%';
+    
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 0) { navbar.classList.add('scrolled'); }
+      else { navbar.classList.remove('scrolled'); }
+    });
+    
+    // Intersection Observer for fade animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const faders = document.querySelectorAll('.fade');
+      const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -50px 0px" };
+      const appearOnScroll = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { entry.target.classList.add('visible'); }
+          else { entry.target.classList.remove('visible'); }
+        });
+      }, appearOptions);
+      faders.forEach(fader => appearOnScroll.observe(fader));
+    });
+    
+    // Back to Top Arrow functionality
+    window.addEventListener('scroll', () => {
+      const backToTop = document.getElementById('back-to-top');
+      if (window.scrollY > 300) { backToTop.classList.add('show'); }
+      else { backToTop.classList.remove('show'); }
+    });
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    // Mobile Nav Toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+    
+    // Virtual Live Sessions Carousel (simple rotation)
+    document.addEventListener('DOMContentLoaded', () => {
+      const carousel = document.querySelector('.carousel');
+      const items = document.querySelectorAll('.session-item');
+      const totalItems = items.length;
+      const step = 360 / totalItems;
+      let currentIndex = 0;
+      
+      items.forEach((item, i) => {
+        const angle = i * step;
+        item.style.transform = `translate(-50%, -50%) rotateY(${angle}deg) translateZ(250px)`;
+      });
+      
+      function updateCarousel() {
+        const angle = currentIndex * step;
+        carousel.style.transform = `rotateY(-${angle}deg)`;
+        items.forEach((item, i) => {
+          item.classList.toggle('active', i === (currentIndex % totalItems));
+        });
+      }
+      
+      updateCarousel();
+      setInterval(() => {
+        currentIndex++;
+        updateCarousel();
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
